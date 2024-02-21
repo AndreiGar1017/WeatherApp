@@ -22,12 +22,13 @@ export default App = () => {
     }
   }
 
+
   useEffect(()=>{
     city ? getWeather : setweatherData(null);
   }, [city]);
 
   return[
-    <View style={styles.container}>
+    <View style={ (weatherData === null) ? styles.baseContainer : (weatherData.current.condition.text === "Sunny") ? styles.sunnyContainer: (weatherData.current.condition.text.includes("rain")) ? styles.rainContainer: (weatherData.current.condition.text.includes("cloudy")) ? styles.cloudyContainer: styles.baseContainer }>
       <Text style={styles.title}>Welcome to Weather App!</Text>
       <TextInput
       style={styles.textInput}
@@ -36,15 +37,15 @@ export default App = () => {
       onChangeText= {(text) => setCity(text)}
       />
       <TouchableOpacity style={styles.button} onPress={getWeather}>
-        <Text>Get Weather</Text>
+        <Text style={styles.buttonText}>Get Weather</Text>
       </TouchableOpacity>
       {error && <Text>{error}</Text>}
       {weatherData && (
-        <View>
-          <Text>City: {weatherData.location.name}</Text>
-          <Text>Country: {weatherData.location.country}</Text>
-          <Text>Temperature: {weatherData.current.temp_c}</Text>
-          <Text>Condition: {weatherData.current.condition.text}</Text>
+        <View style = {styles.dataContainer}>
+          <Text style={styles.dataText}>City: {weatherData.location.name}</Text>
+          <Text style={styles.dataText}>Country: {weatherData.location.country}</Text>
+          <Text style={styles.dataText}>Temperature: {weatherData.current.temp_c}</Text>
+          <Text style={styles.dataText}>Condition: {weatherData.current.condition.text}</Text>
         </View>
       )}
     </View>
@@ -52,25 +53,57 @@ export default App = () => {
 }
 
 const styles = StyleSheet.create({
-  container:{
+  baseContainer:{
     flex:1,
     justifyContent: 'center',
-    alignItems: 'center'
+    alignItems: 'center',
   },
   title:{
-    fontSize: 24,
+    fontSize: 30,
     marginBottom:20,
+    fontWeight: "bold"
   },
   textInput:{
     borderWidth:1,
     borderColor:'gray',
     width:'80%',
     padding:10,
-    margin:20
+    margin:20,
+    borderRadius: 5
   },
   button:{
-    backgroundColor:'lightblue',
+    backgroundColor:'#9AD0C2',
     padding:10,
-    borderRadius:5
+    borderRadius:5,
+  },
+  buttonText:{
+    color: "black"
+  },
+  sunnyContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'lightyellow'
+  },
+  rainContainer : {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'lightblue'
+  },
+  cloudyContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'lightgrey'
+  },
+  dataContainer: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingTop: 10
+  },
+  dataText:{
+    fontSize: 20
   }
+
 })
